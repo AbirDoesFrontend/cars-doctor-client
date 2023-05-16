@@ -1,11 +1,34 @@
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/logo.svg'
+import { useContext } from 'react';
+import { AuthContext } from '../../../Provider/Context/AuthProvider';
+import Swal from 'sweetalert2'
 
 const Navbar = () => {
 
+  const { user , logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+    .then(() => {})
+    .then(error => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `${error.message}`
+      })
+    })
+  }
+
   const navBarItems = <>
-        <Link to='/' className='mr-4 pb-1'>Home</Link>
-        <Link to='/about'>About</Link>
+        <li><Link to='/' className='mr-4 pb-1'>Home</Link></li>
+       <li><Link to='/about' className='mr-4 pb-1'>About</Link></li>
+        {
+          user?.email ? <>
+            <li><Link to='/bookings' className='mr-4 pb-1'>My Bookings</Link></li>
+            <li><button onClick={handleLogOut} className='btn btn-danger'>Logout</button></li>
+          </> : <li><Link to='/login'>Login</Link></li>
+        }
   </>
 
   return (
