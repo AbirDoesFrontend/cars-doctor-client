@@ -1,10 +1,16 @@
 import { useContext } from "react";
 import img from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Provider/Context/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const Login = () => {
   const { userSignIn } = useContext(AuthContext);
+
+  const location = useLocation()
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || '/'
 
   const handleSignIn = (event) => {
     event.preventDefault();
@@ -16,7 +22,28 @@ const Login = () => {
     userSignIn(email , password)
     .then(result => {
         const user = result.user;
-        alert('Login Success' , user.displayName)
+        Swal.fire(
+          'Successfully Logged In',
+          'Please exlpore the world of Car Doctor',
+          'success'
+        )
+        const loggedUser = {
+          email : user.email
+        }
+
+        fetch('http://localhost:5000/jwt' , {
+          method : 'POST',
+          headers : {
+            'content-type'  : 'application/json'
+          },
+          body : JSON.stringify(loggedUser)
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log('jwt response' , data)
+          localStorage.setItem('car-access-token' , data.token)
+          navigate(from , { replace : true })
+        })
     })
     .catch(error => alert(error.message))
 
