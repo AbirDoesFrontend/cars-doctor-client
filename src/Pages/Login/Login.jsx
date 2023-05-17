@@ -3,6 +3,7 @@ import img from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Provider/Context/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 const Login = () => {
   const { userSignIn } = useContext(AuthContext);
@@ -27,6 +28,7 @@ const Login = () => {
           'Please exlpore the world of Car Doctor',
           'success'
         )
+        navigate(from , { replace : true })
         const loggedUser = {
           email : user.email
         }
@@ -42,7 +44,6 @@ const Login = () => {
         .then(data => {
           console.log('jwt response' , data)
           localStorage.setItem('car-access-token' , data.token)
-          navigate(from , { replace : true })
         })
     })
     .catch(error => alert(error.message))
@@ -100,6 +101,7 @@ const Login = () => {
                 </label>
               </div>
             </form>
+            <SocialLogin />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createContext } from "react";
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged , signInWithEmailAndPassword,  signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged , signInWithEmailAndPassword,  signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useEffect } from "react";
 import app from "../../firebase/firebase.config";
 
@@ -12,6 +12,7 @@ const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState([])
     const [loading, setLoading] = useState(true)
+    const googleProvider = new GoogleAuthProvider();
 
     const userSignIn = (email , password) => {
         setLoading(true)
@@ -23,6 +24,11 @@ const AuthProvider = ({ children }) => {
         return createUserWithEmailAndPassword(auth , email , password)
     }
 
+    const googleSignIn = () => {
+      setLoading(true)
+      return signInWithPopup(auth , googleProvider)
+    }
+
     const logOut = () => {
       return signOut(auth)
     }
@@ -32,6 +38,26 @@ const AuthProvider = ({ children }) => {
         setUser(currentUser)
         setLoading(false)
         console.log('current-user' , currentUser)
+        if(currentUser && currentUser.email) {
+          const loggedUser = {
+            email : currentUser.email
+          }
+  
+          fetch('http://localhost:5000/jwt' , {
+            method : 'POST',
+            headers : {
+              'content-type'  : 'application/json'
+            },
+            body : JSON.stringify(loggedUser)
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log('jwt response' , data)
+            localStorage.setItem('car-access-token' , data.token)
+          })
+        } else {
+          localStorage.removeItem('car-access-token')
+        }
       })
     
       return () => {
@@ -45,6 +71,7 @@ const AuthProvider = ({ children }) => {
         loading,
         createUser,
         userSignIn,
+        googleSignIn,
         logOut
     }
 

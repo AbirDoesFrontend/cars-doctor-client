@@ -2,6 +2,7 @@ import { useContext } from "react";
 import img from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Provider/Context/AuthProvider";
 import { Link } from "react-router-dom";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 const SignUp = () => {
   const { createUser } = useContext(AuthContext);
@@ -10,14 +11,13 @@ const SignUp = () => {
     event.preventDefault();
 
     const form = event.target;
-    const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
 
     createUser(email, password)
       .then((result) => {
         const user = result.user;
-        alert("Sign up success");
+        alert("Sign up success" , user?.displayName);
       })
       .catch((error) => alert(error.message));
 
@@ -79,6 +79,7 @@ const SignUp = () => {
                 </label>
               </div>
             </form>
+            <SocialLogin />
           </div>
         </div>
       </div>

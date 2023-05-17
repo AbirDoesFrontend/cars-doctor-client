@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/Context/AuthProvider";
 import BookingRow from "./BookingRow";
 import Swal from 'sweetalert2'
+import { useNavigate } from "react-router-dom";
 
 const Bookings = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [bookings, setBookings] = useState([]);
 
@@ -18,8 +20,16 @@ const Bookings = () => {
       }
     })
       .then((res) => res.json())
-      .then((data) => setBookings(data));
-  }, [url]);
+      .then((data) => {
+
+        if(!data.error){
+          setBookings(data)
+        } else {
+          navigate('/')
+        }
+
+      });
+  }, [url , navigate]);
 
   const handleDelete = id => {
     Swal.fire({

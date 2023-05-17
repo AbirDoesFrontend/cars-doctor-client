@@ -10,9 +10,7 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     logOut()
-    .then(() => {
-      localStorage.removeItem('car-access-token')
-    })
+    .then(() => {})
     .then(error => {
       Swal.fire({
         icon: 'error',
