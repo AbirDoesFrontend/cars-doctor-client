@@ -10,7 +10,7 @@ const Bookings = () => {
 
   const [bookings, setBookings] = useState([]);
 
-  const url = `http://localhost:5000/bookings?email=${user.email}`;
+  const url = `https://cars-doctor-server-beta.vercel.app/bookings?email=${user.email}`;
 
   useEffect(() => {
     fetch(url , {
@@ -42,7 +42,7 @@ const Bookings = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/bookings/${id}` , {
+        fetch(`https://cars-doctor-server-beta.vercel.app/bookings/${id}` , {
             method : 'DELETE'
         })
         .then(res => res.json())
@@ -62,7 +62,7 @@ const Bookings = () => {
   };
 
   const handleBookingConfirm = id => {
-    fetch(`http://localhost:5000/bookings/${id}` , {
+    fetch(`https://cars-doctor-server-beta.vercel.app/bookings/${id}` , {
             method : 'PATCH',
             headers : {
                 'content-type' : 'application/json'
