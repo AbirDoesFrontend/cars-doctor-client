@@ -7,7 +7,7 @@ const Services = () => {
     const [services, setServices] = useState([])
 
     useEffect(() => {
-        fetch('https://cars-doctor-server-beta.vercel.app/services')
+        fetch('http://localhost:5000/services')
         .then(res => res.json())
         .then(data => setServices(data))
     }, [])
@@ -20,7 +20,7 @@ const Services = () => {
                 <h2 className="text-5xl">Our Service Area</h2>
                 <p>the majority have suffered alteration in some form, by injected humour, or randomised <br />words which don&apos;t look even slightly believable. </p>
             </div>
-            <div className="grid grid-cols-3 sm:grid-col-2 lg:grid-col-3 gap-6 justify-center">
+            <div className="grid grid-cols-3 sm:grid-col-2 lg:grid-col-3 gap-6 justify-center p-12">
                 {
                     services.map(service => <ServiceCard 
                         key={service._id}
