@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ServiceCard from "./ServiceCard";
 
 const Services = () => {
   const [services, setServices] = useState([]);
   const [asceding, setAsceding] = useState(true);
+  
+  const searchRef = useRef(null);
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
-    fetch(`http://localhost:5000/services?sort=${asceding ? 'asc' : 'desc' }`)
+    fetch(`http://localhost:5000/services?search=${search}&sort=${asceding ? "asc" : "desc"}`)
       .then((res) => res.json())
       .then((data) => setServices(data));
-  }, [asceding]);
+  }, [asceding , search]);
+
+  const handleSearch = () => {
+    setSearch(searchRef.current.value);
+    console.log(searchRef.current.value)
+  }
 
   return (
     <div className="bg-base-200 pt-5">
@@ -21,6 +29,32 @@ const Services = () => {
           humour, or randomised <br />
           words which don&apos;t look even slightly believable.{" "}
         </p>
+      </div>
+      <div className="form-control ml-12 mt-12 ">
+        <div className="input-group">
+          <input
+            type="text"
+            placeholder="Search…"
+            className="input input-bordered"
+            ref={searchRef}
+          />
+          <button className="btn btn-square" onClick={handleSearch}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
       <div className="text-center mt-5 mb-5">
         <button
