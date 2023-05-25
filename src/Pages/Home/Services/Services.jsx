@@ -9,14 +9,13 @@ const Services = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    fetch(`http://localhost:5000/services?search=${search}&sort=${asceding ? "asc" : "desc"}`)
+    fetch(`https://cars-doctor-server-beta.vercel.app/services?search=${search}&sort=${asceding ? "asc" : "desc"}`)
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, [asceding , search]);
 
   const handleSearch = () => {
     setSearch(searchRef.current.value);
-    console.log(searchRef.current.value)
   }
 
   return (
